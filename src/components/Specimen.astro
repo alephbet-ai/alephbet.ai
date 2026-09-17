@@ -1,0 +1,116 @@
+---
+// A compact Lexend type specimen. Every class token below appears as a full
+// string literal so Tailwind's scanner picks it up (no split concatenation).
+
+const weights = [
+  { name: "Light", value: 300, cls: "font-light" },
+  { name: "Regular", value: 400, cls: "font-normal" },
+  { name: "Medium", value: 500, cls: "font-medium" },
+  { name: "SemiBold", value: 600, cls: "font-semibold" },
+  { name: "Bold", value: 700, cls: "font-bold" },
+];
+
+const scale = [
+  { px: 48, cls: "text-5xl", weight: "font-bold", tracking: "tracking-tight" },
+  { px: 36, cls: "text-4xl", weight: "font-bold", tracking: "tracking-tight" },
+  { px: 24, cls: "text-2xl", weight: "font-semibold", tracking: "tracking-tight" },
+  { px: 20, cls: "text-xl", weight: "font-medium", tracking: "tracking-normal" },
+  { px: 18, cls: "text-lg", weight: "font-normal", tracking: "tracking-normal" },
+  { px: 14, cls: "text-sm", weight: "font-normal", tracking: "tracking-normal" },
+  { px: 12, cls: "text-xs", weight: "font-medium", tracking: "tracking-wide" },
+];
+---
+
+<aside class="lg:sticky lg:top-12 lg:self-start">
+  <div class="rounded-2xl border border-zinc-200 bg-white p-8">
+    <!-- Header -->
+    <p class="text-xs font-medium uppercase tracking-[0.2em] text-zinc-500">
+      Type specimen
+    </p>
+    <div class="mt-2 flex items-baseline justify-between">
+      <span class="text-2xl font-semibold tracking-tight text-zinc-900"
+        >Lexend</span
+      >
+      <span class="text-xs tabular-nums text-zinc-500">Variable &middot; 300&ndash;700</span>
+    </div>
+
+    <!-- Big glyph showcase -->
+    <div class="mt-6 border-t border-zinc-200 pt-6">
+      <div class="flex items-end justify-between leading-none">
+        <span class="text-[7rem] font-bold leading-none tracking-tight text-zinc-900"
+          >Aa</span
+        >
+        <span class="pb-1 text-right text-sm leading-snug text-zinc-500"
+          >Reading,<br />redesigned</span
+        >
+      </div>
+    </div>
+
+    <!-- Type scale -->
+    <section class="mt-6 border-t border-zinc-200 pt-6">
+      <h3 class="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-zinc-400">
+        Type scale
+      </h3>
+      <ul class="space-y-3">
+        {
+          scale.map((s) => (
+            <li class="flex items-baseline gap-4">
+              <span class="w-12 shrink-0 text-xs tabular-nums text-zinc-400">
+                {s.px}px
+              </span>
+              <span
+                class={`truncate text-zinc-900 ${s.cls} ${s.weight} ${s.tracking}`}
+              >
+                Change the way
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- Weights -->
+    <section class="mt-6 border-t border-zinc-200 pt-6">
+      <h3 class="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-zinc-400">
+        Weights
+      </h3>
+      <ul class="space-y-2">
+        {
+          weights.map((w) => (
+            <li class="flex items-baseline justify-between gap-4">
+              <span class={`text-2xl text-zinc-900 ${w.cls}`}>Lexend</span>
+              <span class="text-xs tabular-nums text-zinc-400">
+                {w.name} {w.value}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- Character set -->
+    <section class="mt-6 border-t border-zinc-200 pt-6">
+      <h3 class="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-zinc-400">
+        Characters
+      </h3>
+      <div class="space-y-2 text-lg leading-relaxed tracking-wide text-zinc-700">
+        <p>ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
+        <p>abcdefghijklmnopqrstuvwxyz</p>
+        <p class="tabular-nums">0123456789</p>
+        <p>&amp; @ # ? ! ( ) [ ] / * + &ndash; =</p>
+      </div>
+    </section>
+
+    <!-- Body in context -->
+    <section class="mt-6 border-t border-zinc-200 pt-6">
+      <h3 class="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-zinc-400">
+        Body &middot; 16px / 1.8
+      </h3>
+      <p class="text-base leading-[1.8] text-zinc-700">
+        The quick brown fox jumps over the lazy dog. Lexend was built to reduce
+        crowding and improve reading proficiency, so paragraphs stay calm even
+        at length.
+      </p>
+    </section>
+  </div>
+</aside>

@@ -1,0 +1,141 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Specimen from "../components/Specimen.astro";
+---
+
+<Layout title="Change the way the world reads — a Lexend type sample">
+  <main class="mx-auto max-w-7xl px-6 py-20 sm:py-28">
+    <!--
+      Two columns on large screens with a pale full-height rule between them.
+      The middle 1px grid track is the divider; lg:gap-x-16 gives it equal
+      breathing room on both sides. Columns stack on small screens.
+    -->
+    <div
+      class="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_1px_0.9fr] lg:gap-x-16 lg:gap-y-0"
+    >
+      <!-- LEFT: the article (unchanged) -->
+      <div>
+        <!-- Eyebrow: small, uppercase, widely tracked — a quiet label above the title. -->
+        <p class="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
+          Typography &middot; Sample
+        </p>
+
+        <!--
+          Title practice: heavy grade (700), tight line-height so multi-line
+          titles hold together, and tight tracking. Lexend's open letterforms
+          keep it confident without feeling cramped. text-balance evens out the
+          line breaks.
+        -->
+        <h1
+          class="text-balance text-4xl font-bold leading-tight tracking-tight text-zinc-900 sm:text-5xl"
+        >
+          Change the way the world reads
+        </h1>
+
+        <!--
+          Lede practice: larger and lighter than body, held to a shorter measure,
+          set in a calm mid-gray so it steps back from the title.
+        -->
+        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-600 sm:text-xl">
+          A font, much like the prescription in a pair of eyeglasses, should
+          change based on the reader&rsquo;s unique needs. This page is a small
+          demonstration of how the Lexend typeface is meant to be set.
+        </p>
+
+        <hr class="my-12 border-zinc-200" />
+
+        <!--
+          Body practice, driven by @tailwindcss/typography:
+            prose-lg              → ~18px text with ~1.78 line-height
+            prose-zinc            → a fully monochrome (grayscale) prose theme
+            prose-p:leading-[1.8] → generous line-height so lines never feel stacked
+            prose-headings:*      → heavier, tighter section headings
+            default measure (~65ch) keeps a comfortable reading line length
+        -->
+        <article
+          class="prose prose-lg prose-zinc max-w-none
+                 prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-zinc-900
+                 prose-p:leading-[1.8] prose-p:text-zinc-700
+                 prose-li:text-zinc-700
+                 prose-a:font-medium prose-a:text-zinc-900 prose-a:underline prose-a:decoration-zinc-300 prose-a:underline-offset-2 hover:prose-a:decoration-zinc-900
+                 prose-strong:text-zinc-900
+                 prose-blockquote:border-l-zinc-300 prose-blockquote:font-normal prose-blockquote:not-italic prose-blockquote:text-zinc-600"
+        >
+          <h2>Three ideas behind the letters</h2>
+          <p>
+            Lexend was designed around reading proficiency rather than pure
+            style. Three typographic decisions do the work:
+          </p>
+          <ul>
+            <li>
+              <strong>A sans-serif face</strong> to reduce cognitive noise, so the
+              eye spends less effort decoding each shape.
+            </li>
+            <li>
+              <strong>Expanded scaling</strong> that improves the potential for character
+              recognition.
+            </li>
+            <li>
+              <strong>Hyper-expanded character spacing</strong>, which creates a little
+              more lag time between glyphs and reduces crowding.
+            </li>
+          </ul>
+
+          <h2>Setting titles</h2>
+          <p>
+            Headlines carry weight &mdash; literally. Give them a heavier grade
+            (600&ndash;700), pull the line-height in close so multi-line titles
+            hold together, and let the tracking stay tight. Because
+            Lexend&rsquo;s letterforms are already open, titles read as confident
+            without feeling cramped. Keep the measure short; a title rarely needs
+            the full width of the column.
+          </p>
+
+          <h2>Setting body text</h2>
+          <p>
+            Body copy is where Lexend earns its keep. In the original readability
+            study, all text was set at 16&nbsp;pt &mdash; treat that as a floor,
+            not a ceiling. This page runs slightly larger for comfort on screens.
+          </p>
+          <p>
+            Three habits keep paragraphs calm: a generous line-height (around
+            1.7&ndash;1.8) so lines never feel stacked; a comfortable measure of
+            roughly 60&ndash;75 characters so the eye reliably finds the next
+            line; and a normal weight (400) that lets the expanded spacing
+            breathe. Resist the urge to tighten &mdash; crowding is the exact
+            thing the typeface was built to avoid.
+          </p>
+
+          <h2>One color, on purpose</h2>
+          <p>
+            The palette here is deliberately monochrome. Stripping color down to
+            a single grayscale ramp puts all the emphasis on rhythm, contrast,
+            and spacing &mdash; the things type is actually made of. Text sits
+            near-black on near-white, secondary notes step back into mid-gray,
+            and rules stay quiet. It is a starting point you can add an accent
+            color to later without touching the type.
+          </p>
+
+          <blockquote>
+            Good typography is invisible: you notice the reading, not the letters.
+          </blockquote>
+        </article>
+      </div>
+
+      <!-- MIDDLE: pale vertical divider (large screens only) -->
+      <div class="hidden bg-zinc-200 lg:block" aria-hidden="true"></div>
+
+      <!-- RIGHT: the type specimen -->
+      <Specimen />
+    </div>
+
+    <footer class="mt-16 border-t border-zinc-200 pt-8 text-sm text-zinc-500">
+      Built with Astro, Tailwind CSS, and Lexend. Typography practices adapted
+      from <a
+        href="https://www.lexend.com"
+        class="underline decoration-zinc-300 underline-offset-2 hover:decoration-zinc-900"
+        >lexend.com</a
+      >.
+    </footer>
+  </main>
+</Layout>
