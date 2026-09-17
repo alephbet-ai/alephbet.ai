@@ -13,6 +13,12 @@ export const authorType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "position",
+      title: "Position / role",
+      type: "string",
+    }),
+    defineField({
+      // Kept for linking to an author page on the website.
       name: "slug",
       type: "slug",
       options: { source: "name", maxLength: 96 },
@@ -21,6 +27,13 @@ export const authorType = defineType({
       name: "image",
       type: "image",
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Alternative text",
+        }),
+      ],
     }),
     defineField({
       name: "bio",
@@ -29,6 +42,6 @@ export const authorType = defineType({
     }),
   ],
   preview: {
-    select: { title: "name", media: "image" },
+    select: { title: "name", subtitle: "position", media: "image" },
   },
 });

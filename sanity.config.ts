@@ -3,6 +3,7 @@ import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { schemaTypes } from "./src/sanity/schemaTypes";
 import { projectId, dataset, apiVersion } from "./src/sanity/env";
+import { structure } from "./src/sanity/structure";
 
 // Studio configuration. When embedded via @sanity/astro it is mounted at the
 // integration's `studioBasePath` (/studio); `sanity dev` also reads this file.
@@ -11,6 +12,9 @@ export default defineConfig({
   title: "alephbet.ai",
   projectId,
   dataset,
-  plugins: [structureTool(), visionTool({ defaultApiVersion: apiVersion })],
+  plugins: [
+    structureTool({ structure }),
+    visionTool({ defaultApiVersion: apiVersion }),
+  ],
   schema: { types: schemaTypes },
 });
