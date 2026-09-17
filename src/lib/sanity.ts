@@ -18,6 +18,7 @@ export const INSIGHTS_QUERY = defineQuery(`
     slug,
     teaser,
     coverImage,
+    tags,
     "author": author->{ name, position, image }
   }
 `);
@@ -32,6 +33,7 @@ export const INSIGHT_QUERY = defineQuery(`
     tldr,
     body,
     coverImage,
+    tags,
     "author": author->{ name, position, image },
     metaTitle, metaDescription, ogImage, keywords, canonicalUrl, noIndex
   }
@@ -48,6 +50,7 @@ export const SERVICE_GROUPS_QUERY = defineQuery(`
     title,
     slug,
     coverImage,
+    description,
     "services": *[_type == "service" && references(^._id)] | order(orderRank){
       _id, title, slug, coverImage
     }
@@ -65,7 +68,8 @@ export const SERVICES_QUERY = defineQuery(`
     slug,
     coverImage,
     description,
-    "group": serviceGroup->{ title, slug }
+    "group": serviceGroup->{ title, slug },
+    relatedInsights[]->{ _id, title, slug, teaser, coverImage }
   }
 `);
 export async function getServices() {
@@ -95,6 +99,7 @@ export const CASE_STUDY_QUERY = defineQuery(`
     body,
     coverImage,
     "author": author->{ name, position, image },
+    relatedInsights[]->{ _id, title, slug, teaser, coverImage },
     metaTitle, metaDescription, ogImage, keywords, canonicalUrl, noIndex
   }
 `);
@@ -105,7 +110,7 @@ export async function getCaseStudy(slug: string) {
 /* Authors ----------------------------------------------------------------- */
 
 export const AUTHORS_QUERY = defineQuery(`
-  *[_type == "author"] | order(name asc){ _id, name, position, image, slug }
+  *[_type == "author"] | order(name asc){ _id, name, position, image, slug, bio }
 `);
 export async function getAuthors() {
   return sanityClient.fetch(AUTHORS_QUERY);

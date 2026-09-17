@@ -103,17 +103,20 @@ Every document has a slug (for website routing) and, where noted, a dedicated
 **SEO** tab (meta title/description, social image, keywords, canonical URL,
 noindex) via reusable [field groups](src/sanity/schemaTypes/shared/seoFields.ts).
 
-- **Author** — name, position, image, slug.
+- **Author** — name, position, image, slug, bio.
 - **Insight** — title, slug, author (reference), cover image, teaser, TL;DR
-  (rich text), body (rich text with image blocks), and an SEO tab.
-- **Service Group** — title, slug, cover image, and an SEO tab.
+  (rich text), body (rich text with image blocks), tags, and an SEO tab.
+- **Service Group** — title, slug, cover image, description (rich text), and an
+  SEO tab.
 - **Service** — service group (reference), title, slug, cover image, description
-  (rich text), an SEO tab, and **manual drag-and-drop ordering** (via
+  (rich text), optional related insights (references), an SEO tab, and **manual
+  drag-and-drop ordering** (via
   [`@sanity/orderable-document-list`](https://github.com/sanity-io/orderable-document-list);
-  the sort key is stored in `orderRank`, and the reorder UI is the "Services
-  (drag to reorder)" list in the Studio).
+  the sort key is stored in `orderRank`). In the Studio, services are **grouped
+  by service group** — the "Services" list opens each group's own
+  drag-to-reorder list (see [`src/sanity/structure.ts`](src/sanity/structure.ts)).
 - **Case Study** — title, slug, author (reference), cover image, teaser, body
-  (rich text), and an SEO tab.
+  (rich text), optional related insights (references), and an SEO tab.
 - **blockContent** — reusable Portable Text (headings, quote, lists, links,
   inline images) used by every rich-text field above.
 

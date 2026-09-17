@@ -1,4 +1,4 @@
-import { defineType, defineField } from "sanity";
+import { defineType, defineField, defineArrayMember } from "sanity";
 import { CogIcon } from "@sanity/icons/Cog";
 import {
   orderRankField,
@@ -12,7 +12,7 @@ export const serviceType = defineType({
   type: "document",
   icon: CogIcon,
   // Manual drag-and-drop sorting: the plugin stores the sort key in `orderRank`
-  // and the reorder UI lives in the "Services" Structure list (see sanity.config).
+  // and the reorder UI lives in the "Services" Structure list (see structure.ts).
   orderings: [orderRankOrdering],
   groups: [{ name: "content", title: "Content", default: true }, seoGroup],
   fields: [
@@ -53,6 +53,16 @@ export const serviceType = defineType({
       title: "Description",
       type: "blockContent",
       group: "content",
+    }),
+    defineField({
+      name: "relatedInsights",
+      title: "Related insights",
+      type: "array",
+      group: "content",
+      description: "Optional — insights to feature alongside this service.",
+      of: [
+        defineArrayMember({ type: "reference", to: [{ type: "insight" }] }),
+      ],
     }),
     ...seoFields,
   ],

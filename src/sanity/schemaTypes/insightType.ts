@@ -1,4 +1,4 @@
-import { defineType, defineField } from "sanity";
+import { defineType, defineField, defineArrayMember } from "sanity";
 import { BulbOutlineIcon } from "@sanity/icons/BulbOutline";
 import { seoGroup, seoFields } from "./shared/seoFields";
 
@@ -57,6 +57,13 @@ export const insightType = defineType({
       name: "body",
       type: "blockContent",
       group: "content",
+    }),
+    defineField({
+      name: "tags",
+      type: "array",
+      group: "content",
+      of: [defineArrayMember({ type: "string" })],
+      options: { layout: "tags" },
     }),
     ...seoFields,
   ],

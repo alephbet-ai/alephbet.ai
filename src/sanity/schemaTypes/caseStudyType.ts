@@ -1,4 +1,4 @@
-import { defineType, defineField } from "sanity";
+import { defineType, defineField, defineArrayMember } from "sanity";
 import { CaseIcon } from "@sanity/icons/Case";
 import { seoGroup, seoFields } from "./shared/seoFields";
 
@@ -50,6 +50,16 @@ export const caseStudyType = defineType({
       name: "body",
       type: "blockContent",
       group: "content",
+    }),
+    defineField({
+      name: "relatedInsights",
+      title: "Related insights",
+      type: "array",
+      group: "content",
+      description: "Optional — insights related to this case study.",
+      of: [
+        defineArrayMember({ type: "reference", to: [{ type: "insight" }] }),
+      ],
     }),
     ...seoFields,
   ],

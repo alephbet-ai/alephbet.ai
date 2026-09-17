@@ -32,6 +32,12 @@ export const serviceGroupType = defineType({
         defineField({ name: "alt", type: "string", title: "Alternative text" }),
       ],
     }),
+    defineField({
+      name: "description",
+      title: "Description",
+      type: "blockContent",
+      group: "content",
+    }),
     ...seoFields,
   ],
   preview: {

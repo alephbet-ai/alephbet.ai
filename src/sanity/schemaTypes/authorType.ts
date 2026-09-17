@@ -35,6 +35,11 @@ export const authorType = defineType({
         }),
       ],
     }),
+    defineField({
+      name: "bio",
+      type: "text",
+      rows: 4,
+    }),
   ],
   preview: {
     select: { title: "name", subtitle: "position", media: "image" },
