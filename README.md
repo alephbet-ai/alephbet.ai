@@ -8,6 +8,10 @@ and the **`@tailwindcss/typography`** plugin. The color scheme is intentionally
 The page content itself explains the typography practices it demonstrates — the
 practices were adapted from [lexend.com](https://www.lexend.com).
 
+Content is managed with **Sanity**, whose Studio is embedded directly in this app
+at [`/studio`](http://localhost:4321/studio) — see
+[Content & Sanity Studio](#content--sanity-studio).
+
 ## Tech stack
 
 | Tool | Purpose |
@@ -16,14 +20,18 @@ practices were adapted from [lexend.com](https://www.lexend.com).
 | [Tailwind CSS v4](https://tailwindcss.com) | Utility-first styling (via the `@tailwindcss/vite` plugin) |
 | [`@tailwindcss/typography`](https://github.com/tailwindlabs/tailwindcss-typography) | Sensible defaults for long-form prose (`prose` classes) |
 | [Lexend](https://fonts.google.com/specimen/Lexend) | Variable font, loaded from Google Fonts (weight axis 300–700) |
+| [Sanity](https://www.sanity.io) | Headless CMS + Studio (latest, React 19) |
+| [`@sanity/astro`](https://github.com/sanity-io/sanity-astro) | Embeds the Studio and exposes the `sanity:client` module |
+| [`@astrojs/react`](https://docs.astro.build/en/guides/integrations-guide/react/) | Renders the React-based Studio inside Astro |
 
 ## Getting started
 
 ```bash
-npm install     # install dependencies
-npm run dev     # start the dev server at http://localhost:4321
-npm run build   # build the static site into ./dist
-npm run preview # preview the production build locally
+cp .env.example .env  # Sanity project id + dataset (already filled in)
+npm install           # install dependencies
+npm run dev           # site at http://localhost:4321, Studio at /studio
+npm run build         # build the static site + Studio into ./dist
+npm run preview       # preview the production build locally
 ```
 
 > **Node version:** installs cleanly on Node 22.16, but a transitive dependency
@@ -34,7 +42,10 @@ npm run preview # preview the production build locally
 
 ```
 .
-├── astro.config.mjs        # registers the Tailwind v4 Vite plugin
+├── astro.config.mjs        # Tailwind v4 Vite plugin + Sanity & React integrations
+├── sanity.config.ts        # Studio config (schema + plugins)
+├── sanity.cli.ts           # Sanity CLI config (deploy, typegen)
+├── .env.example            # PUBLIC_SANITY_* connection values
 ├── public/
 │   └── favicon.svg         # monochrome mark
 ├── src/
@@ -42,9 +53,84 @@ npm run preview # preview the production build locally
 │   │   └── Layout.astro     # <head>, Lexend Google Fonts link, mono <body>
 │   ├── pages/
 │   │   └── index.astro      # the single page (title + body)
-│   └── styles/
-│       └── global.css       # Tailwind import, typography plugin, Lexend theme
+│   ├── styles/
+│   │   └── global.css       # Tailwind import, typography plugin, Lexend theme
+│   ├── lib/
+│   │   └── sanity.ts        # typed query helpers (getPosts, getPost, urlFor)
+│   └── sanity/
+│       ├── env.ts           # projectId / dataset / apiVersion
+│       └── schemaTypes/     # content model: post, author, blockContent
 └── README.md
+```
+
+## Content & Sanity Studio
+
+Content is managed with [Sanity](https://www.sanity.io). The Studio is **embedded
+in this app** via [`@sanity/astro`](https://github.com/sanity-io/sanity-astro) and
+served at `/studio` — there is no separate Studio app to run or deploy.
+
+| | |
+| --- | --- |
+| Project ID | `z3owbx4h` |
+| Dataset | `production` |
+| Organization ID | `ocui6a6gg` |
+| Studio route | `/studio` |
+
+### Configuration
+
+Connection details live in `.env` (copy from `.env.example`). `projectId` and
+`dataset` are **not secrets** — they identify the public content API and ship in
+the browser bundle regardless.
+
+```bash
+PUBLIC_SANITY_PROJECT_ID=z3owbx4h
+PUBLIC_SANITY_DATASET=production
+```
+
+- `astro.config.mjs` reads these with Vite's `loadEnv` and configures the
+  `@sanity/astro` integration, which exposes the `sanity:client` module.
+- `sanity.config.ts` / `sanity.cli.ts` define the Studio and CLI config.
+- `src/sanity/schemaTypes/` holds the content model; `src/lib/sanity.ts` has
+  typed GROQ query helpers.
+
+> **Note:** `@sanity/icons` v5 doesn't re-export named icons from its barrel for
+> strict ESM bundlers, so schema files import icons from subpaths
+> (`@sanity/icons/DocumentText`) instead of `@sanity/icons`.
+
+### Content model
+
+- **Post** — title, slug, author (reference), main image, excerpt, publishedAt,
+  and body (Portable Text).
+- **Author** — name, slug, image, bio.
+- **blockContent** — reusable Portable Text (headings, quote, lists, links,
+  inline images).
+
+### Working with the Studio
+
+```bash
+npm run dev                  # Studio at http://localhost:4321/studio
+npx sanity login             # authenticate the CLI (first time)
+npx sanity deploy            # optional: host at <name>.sanity.studio
+npx sanity typegen generate  # generate types from schema + GROQ queries
+```
+
+If content doesn't load in the browser Studio, add your dev origin to the
+project's CORS allow-list (once):
+
+```bash
+npx sanity cors add http://localhost:4321 --credentials
+```
+
+### Fetching content in a page
+
+```astro
+---
+import { getPosts } from "../lib/sanity";
+const posts = await getPosts();
+---
+<ul>
+  {posts.map((post) => <li>{post.title}</li>)}
+</ul>
 ```
 
 ## How Lexend is loaded
@@ -109,7 +195,7 @@ These are applied on the article element in `src/pages/index.astro`:
 ```html
 <article class="prose prose-lg prose-zinc max-w-none
                 prose-headings:font-semibold prose-headings:tracking-tight
-                prose-p:leading-[1.8] prose-p:text-zinc-700 ...">
+                prose-p:leading-[1.7] prose-p:text-zinc-700 ...">
 ```
 
 ## Color scheme
