@@ -83,11 +83,13 @@ rests on three ideas — reflected in how this page sets type:
 
 ### Titles
 
-- Heavy grade — **`font-bold` (700)** for the page title, `font-semibold` (600)
-  for section headings.
-- **Tight line-height** (`leading-tight`) so multi-line titles cohere.
-- **Tight tracking** (`tracking-tight`) — Lexend's letterforms are already open,
-  so titles stay confident without feeling cramped.
+- Heavier, open grade — **`font-semibold` (600)** for the page title and section
+  headings.
+- **Very tight line-height** (`leading-none`) so a multi-line title reads as one
+  confident block.
+- **Natural tracking** (`tracking-normal`) — Lexend's letterforms are already
+  open, so no condensing is needed.
+- **Large display size** — up to `text-6xl` on wide screens.
 - **Short measure** — titles are held to `max-w-2xl`/`max-w-3xl`, not full width.
 - `text-balance` evens out ragged line breaks on the headline.
 
@@ -95,8 +97,8 @@ rests on three ideas — reflected in how this page sets type:
 
 - **Comfortable size** — `prose-lg` renders body copy at ~18px. In Lexend's
   original readability study all text was set at 16pt; treat that as the floor.
-- **Generous line-height** — ~1.7–1.8 (`prose-p:leading-[1.8]`) so lines never
-  feel stacked.
+- **Generous line-height** — ~1.7 (`prose-p:leading-[1.7]`) so lines never feel
+  stacked without becoming airy.
 - **Comfortable measure** — the default `prose` width (~65ch) keeps lines to
   roughly 60–75 characters.
 - **Normal weight (400)** for body so the expanded spacing has room to breathe —
