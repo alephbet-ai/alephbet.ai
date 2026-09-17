@@ -1,6 +1,8 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
+import { orderableDocumentListDeskItem } from "@sanity/orderable-document-list";
+import { CogIcon } from "@sanity/icons/Cog";
 import { schemaTypes } from "./src/sanity/schemaTypes";
 import { projectId, dataset, apiVersion } from "./src/sanity/env";
 
@@ -11,6 +13,27 @@ export default defineConfig({
   title: "alephbet.ai",
   projectId,
   dataset,
-  plugins: [structureTool(), visionTool({ defaultApiVersion: apiVersion })],
+  plugins: [
+    structureTool({
+      // Services get a drag-to-reorder list; everything else is a normal list.
+      structure: (S, context) =>
+        S.list()
+          .title("Content")
+          .items([
+            orderableDocumentListDeskItem({
+              type: "service",
+              title: "Services (drag to reorder)",
+              icon: CogIcon,
+              S,
+              context,
+            }),
+            S.divider(),
+            ...S.documentTypeListItems().filter(
+              (item) => item.getId() !== "service",
+            ),
+          ]),
+    }),
+    visionTool({ defaultApiVersion: apiVersion }),
+  ],
   schema: { types: schemaTypes },
 });
