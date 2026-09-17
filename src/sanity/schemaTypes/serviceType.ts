@@ -1,9 +1,5 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
 import { CogIcon } from "@sanity/icons/Cog";
-import {
-  orderRankField,
-  orderRankOrdering,
-} from "@sanity/orderable-document-list";
 import { seoGroup, seoFields } from "./shared/seoFields";
 
 export const serviceType = defineType({
@@ -11,12 +7,17 @@ export const serviceType = defineType({
   title: "Service",
   type: "document",
   icon: CogIcon,
-  // Manual drag-and-drop sorting: the plugin stores the sort key in `orderRank`
-  // and the reorder UI lives in the "Services" Structure list (see structure.ts).
-  orderings: [orderRankOrdering],
+  // Manual ordering via `weight` (lower sorts first). Set as the default
+  // ordering so the Studio lists show services in weight order.
+  orderings: [
+    {
+      title: "Manual order (weight)",
+      name: "weightAsc",
+      by: [{ field: "weight", direction: "asc" }],
+    },
+  ],
   groups: [{ name: "content", title: "Content", default: true }, seoGroup],
   fields: [
-    orderRankField({ type: "service" }),
     defineField({
       name: "serviceGroup",
       title: "Service group",
@@ -37,6 +38,14 @@ export const serviceType = defineType({
       group: "content",
       options: { source: "title", maxLength: 96 },
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "weight",
+      title: "Weight (sort order)",
+      type: "number",
+      group: "content",
+      description: "Lower numbers sort first within the service group.",
+      initialValue: 0,
     }),
     defineField({
       name: "coverImage",

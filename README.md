@@ -74,7 +74,8 @@ served at `/studio` — there is no separate Studio app to run or deploy.
 | Project ID | `z3owbx4h` |
 | Dataset | `production` |
 | Organization ID | `ocui6a6gg` |
-| Studio route | `/studio` |
+| Studio route (embedded) | `/studio` |
+| Published Studio | https://alephbet-ai.sanity.studio |
 
 ### Configuration
 
@@ -109,12 +110,11 @@ noindex) via reusable [field groups](src/sanity/schemaTypes/shared/seoFields.ts)
 - **Service Group** — title, slug, cover image, description (rich text), and an
   SEO tab.
 - **Service** — service group (reference), title, slug, cover image, description
-  (rich text), optional related insights (references), an SEO tab, and **manual
-  drag-and-drop ordering** (via
-  [`@sanity/orderable-document-list`](https://github.com/sanity-io/orderable-document-list);
-  the sort key is stored in `orderRank`). In the Studio, services are **grouped
-  by service group** — the "Services" list opens each group's own
-  drag-to-reorder list (see [`src/sanity/structure.ts`](src/sanity/structure.ts)).
+  (rich text), optional related insights (references), an SEO tab, and a
+  **`weight`** field for manual ordering (lower sorts first). In the Studio,
+  services are **grouped by service group** — the "Services" item opens each
+  group's services ordered by weight (see
+  [`src/sanity/structure.ts`](src/sanity/structure.ts)).
 - **Case Study** — title, slug, author (reference), cover image, teaser, body
   (rich text), optional related insights (references), and an SEO tab.
 - **blockContent** — reusable Portable Text (headings, quote, lists, links,

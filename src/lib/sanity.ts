@@ -51,7 +51,7 @@ export const SERVICE_GROUPS_QUERY = defineQuery(`
     slug,
     coverImage,
     description,
-    "services": *[_type == "service" && references(^._id)] | order(orderRank){
+    "services": *[_type == "service" && references(^._id)] | order(weight asc){
       _id, title, slug, coverImage
     }
   }
@@ -60,9 +60,9 @@ export async function getServiceGroups() {
   return sanityClient.fetch(SERVICE_GROUPS_QUERY);
 }
 
-// Services in manual (drag-and-drop) order.
+// Services in manual (weight) order.
 export const SERVICES_QUERY = defineQuery(`
-  *[_type == "service" && defined(slug.current)] | order(orderRank){
+  *[_type == "service" && defined(slug.current)] | order(weight asc){
     _id,
     title,
     slug,

@@ -1,11 +1,10 @@
 import type { StructureResolver } from "sanity/structure";
 import { CogIcon } from "@sanity/icons/Cog";
-import { orderableDocumentListDeskItem } from "@sanity/orderable-document-list";
 import { apiVersion } from "./env";
 
 // Custom Studio Structure: "Services" opens a list of Service Groups, and each
-// group opens a drag-to-reorder list of just that group's services. So services
-// are grouped by Service Group while keeping manual (orderRank) ordering.
+// group opens that group's services ordered by `weight` (lower sorts first).
+// This keeps services grouped by Service Group without an extra plugin.
 export const structure: StructureResolver = (S, context) =>
   S.list()
     .title("Content")
@@ -24,15 +23,18 @@ export const structure: StructureResolver = (S, context) =>
             .title("Services by group")
             .items(
               groups.map((group) =>
-                orderableDocumentListDeskItem({
-                  type: "service",
-                  id: `services-${group._id}`,
-                  title: group.title || "Untitled group",
-                  filter: "serviceGroup._ref == $groupId",
-                  params: { groupId: group._id },
-                  S,
-                  context,
-                }),
+                S.listItem()
+                  .id(`service-group-${group._id}`)
+                  .title(group.title || "Untitled group")
+                  .icon(CogIcon)
+                  .child(
+                    S.documentList()
+                      .id(`services-${group._id}`)
+                      .title(group.title || "Untitled group")
+                      .filter('_type == "service" && serviceGroup._ref == $groupId')
+                      .params({ groupId: group._id })
+                      .defaultOrdering([{ field: "weight", direction: "asc" }]),
+                  ),
               ),
             );
         }),
