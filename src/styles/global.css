@@ -1,14 +1,49 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* Make Lexend the default sans stack, JetBrains Mono the mono stack. */
+/* Make Lexend the default sans stack, Illinois Mono the mono stack. */
 @theme {
   --font-sans:
     "Lexend", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
   --font-mono:
-    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Illinois Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
+}
+
+/*
+  Illinois Mono — a monospace based on Lexend (so it pairs with the body
+  type), by MadSimple, licensed OFL-1.1. Self-hosted from /public as woff2
+  (the upstream repo ships only TTF; converted at build time). See
+  public/fonts/illinois-mono/OFL.txt for the license.
+*/
+@font-face {
+  font-family: "Illinois Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/illinois-mono/IllinoisMono-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Illinois Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/illinois-mono/IllinoisMono-Medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Illinois Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/illinois-mono/IllinoisMono-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Illinois Mono";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/illinois-mono/IllinoisMono-Italic.woff2") format("woff2");
 }
 
 @layer base {
