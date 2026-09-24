@@ -56,10 +56,10 @@ npm run preview       # preview the production build locally
 │   ├── styles/
 │   │   └── global.css       # Tailwind import, typography plugin, Lexend theme
 │   ├── lib/
-│   │   └── sanity.ts        # typed query helpers (getPosts, getPost, urlFor)
+│   │   └── sanity.ts        # typed query helpers (getInsights, getServices, …)
 │   └── sanity/
 │       ├── env.ts           # projectId / dataset / apiVersion
-│       └── schemaTypes/     # content model: post, author, blockContent
+│       └── schemaTypes/     # author, insight, serviceGroup, service, caseStudy
 └── README.md
 ```
 
@@ -74,7 +74,8 @@ served at `/studio` — there is no separate Studio app to run or deploy.
 | Project ID | `z3owbx4h` |
 | Dataset | `production` |
 | Organization ID | `ocui6a6gg` |
-| Studio route | `/studio` |
+| Studio route (embedded) | `/studio` |
+| Published Studio | https://alephbet-ai.sanity.studio |
 
 ### Configuration
 
@@ -99,11 +100,29 @@ PUBLIC_SANITY_DATASET=production
 
 ### Content model
 
-- **Post** — title, slug, author (reference), main image, excerpt, publishedAt,
-  and body (Portable Text).
-- **Author** — name, slug, image, bio.
+Every document has a slug (for website routing) and, where noted, a dedicated
+**SEO** tab (meta title/description, social image, keywords, canonical URL,
+noindex) via reusable [field groups](src/sanity/schemaTypes/shared/seoFields.ts).
+
+- **Author** — name, position, image, slug, bio.
+- **Insight** — title, slug, author (reference), cover image, teaser, TL;DR
+  (rich text), body (rich text with image blocks), tags, and an SEO tab.
+- **Service Group** — title, slug, cover image, description (rich text), and an
+  SEO tab.
+- **Service** — service group (reference), title, slug, cover image, description
+  (rich text), optional related insights (references), an SEO tab, and a
+  **`weight`** field for manual ordering (lower sorts first). In the Studio,
+  services are **grouped by service group** — the "Services" item opens each
+  group's services ordered by weight (see
+  [`src/sanity/structure.ts`](src/sanity/structure.ts)).
+- **Case Study** — title, slug, author (reference), cover image, teaser, body
+  (rich text), optional related insights (references), and an SEO tab.
 - **blockContent** — reusable Portable Text (headings, quote, lists, links,
-  inline images).
+  inline images) used by every rich-text field above.
+
+Query helpers for each type live in [`src/lib/sanity.ts`](src/lib/sanity.ts)
+(`getInsights`, `getInsight`, `getServiceGroups`, `getServices`,
+`getCaseStudies`, `getCaseStudy`, `getAuthors`, plus `urlFor`).
 
 ### Working with the Studio
 
@@ -125,11 +144,11 @@ npx sanity cors add http://localhost:4321 --credentials
 
 ```astro
 ---
-import { getPosts } from "../lib/sanity";
-const posts = await getPosts();
+import { getInsights } from "../lib/sanity";
+const insights = await getInsights();
 ---
 <ul>
-  {posts.map((post) => <li>{post.title}</li>)}
+  {insights.map((insight) => <li>{insight.title}</li>)}
 </ul>
 ```
 
