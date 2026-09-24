@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Specimen from "../components/Specimen.astro";
 import { Code } from "astro:components";
+import { squircleMask } from "../lib/squircle";
 
 // A Go sketch of the "context mixing" problem: trusted rules and
 // untrusted, fetched data are concatenated into one prompt, so the model
@@ -41,6 +42,12 @@ func Run(ctx context.Context, m Model, tools []Tool) error {
   )
   return m.Complete(ctx, prompt, tools)
 }`;
+
+// Squircle masks for the code card (see the comment on the card below).
+// The border layer is 1px larger than the card inside it, so the card's
+// corner radius is one less to keep the ring an even 1px all the way round.
+const cardBorderMask = squircleMask(12);
+const cardMask = squircleMask(11);
 ---
 
 <Layout title="Change the way the world reads — a Lexend type sample">
@@ -117,35 +124,35 @@ func Run(ctx context.Context, m Model, tools []Tool) error {
             overflow-x itself); font-mono keeps it in Illinois Mono. The
             caption bar uses Nord's Polar Night so the whole card is cohesive.
 
-            Corners are an Apple-style squircle, made cross-browser with the
-            figma-squircle library: the client script at the end of this file
-            sets a superellipse clip-path on [data-squircle] and re-runs it on
-            resize. rounded-xl is the no-JS fallback — the script zeroes it so
-            the clip owns the corners. The shadow sits on this outer wrapper
-            (clip-path would crop a shadow on the figure itself) as a
-            drop-shadow filter, so it hugs the squircle silhouette.
+            Corners are an Apple-style squircle, as a CSS mask built at
+            build time by squircleMask (no client JS, nothing recomputed on
+            resize). A mask would cut an ordinary border off at the corners,
+            so the border is its own layer: a zinc-200 box masked to the
+            outer squircle, with 1px padding showing around the inner card
+            masked to a squircle 1px smaller. A mask also crops the element's
+            own box-shadow, so the shadow sits on the unmasked outer wrapper
+            as a drop-shadow filter that hugs the squircle silhouette.
           -->
           <div class="not-prose my-8 drop-shadow-sm">
-            <figure
-              data-squircle
-              class="overflow-hidden rounded-xl border border-zinc-200"
-            >
-              <figcaption
-                class="flex items-center justify-between border-b border-[#434c5e] bg-[#3b4252] px-4 py-2.5"
-              >
-                <span class="text-xs text-[#d8dee9]">Sample A: Genkit sample for typesafe-AI</span>
-                <span
-                  class="text-[10px] font-medium uppercase tracking-widest text-[#81a1c1]"
-                  >Go</span
+            <div class="bg-zinc-200 p-px" style={`mask: ${cardBorderMask}`}>
+              <figure class="overflow-hidden" style={`mask: ${cardMask}`}>
+                <figcaption
+                  class="flex items-center justify-between border-b border-[#434c5e] bg-[#3b4252] px-4 py-2.5"
                 >
-              </figcaption>
-              <Code
-                code={goSample}
-                lang="go"
-                theme="nord"
-                class="m-0! rounded-none px-5 py-4 font-mono text-[14px] leading-relaxed"
-              />
-            </figure>
+                  <span class="text-xs text-[#d8dee9]">Sample A: Genkit sample for typesafe-AI</span>
+                  <span
+                    class="text-[10px] font-medium uppercase tracking-widest text-[#81a1c1]"
+                    >Go</span
+                  >
+                </figcaption>
+                <Code
+                  code={goSample}
+                  lang="go"
+                  theme="nord"
+                  class="m-0! rounded-none px-5 py-4 font-mono text-[14px] leading-relaxed"
+                />
+              </figure>
+            </div>
           </div>
 
           <p>
@@ -223,32 +230,3 @@ func Run(ctx context.Context, m Model, tools []Tool) error {
   </main>
 </Layout>
 
-<script>
-  // Cross-browser squircle corners. CSS corner-shape: squircle is Chromium
-  // only, so we use figma-squircle to generate a superellipse SVG path and
-  // apply it as a clip-path, re-sizing it whenever the element does.
-  import { getSvgPath } from "figma-squircle";
-
-  const SMOOTHING = 1; // 0 = plain round corner, 1 = fullest superellipse
-
-  for (const el of document.querySelectorAll<HTMLElement>("[data-squircle]")) {
-    // Take the CSS radius (rounded-xl) as the corner size, then hand the
-    // corners to the clip so it doesn't fight the rounded-rect overflow clip.
-    const radius = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
-    el.style.borderRadius = "0";
-
-    const paint = () => {
-      const { width, height } = el.getBoundingClientRect();
-      if (!width || !height) return;
-      el.style.clipPath = `path("${getSvgPath({
-        width,
-        height,
-        cornerRadius: radius,
-        cornerSmoothing: SMOOTHING,
-      })}")`;
-    };
-
-    paint();
-    new ResizeObserver(paint).observe(el);
-  }
-</script>
